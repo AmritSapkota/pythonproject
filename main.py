@@ -3,25 +3,19 @@ import datetime
 import random
 
 
-
-
 def connect():
 
-    
     try:
         conn = psycopg2.connect(database="pythonproject", user="postgres",
                                 password="gautam", host="127.0.0.1", port="5432")
 
-      
         cur = conn.cursor()
 
     except (Exception, psycopg2.DatabaseError) as error:
 
         print("Error while creating PostgreSQL table", error)
 
- 
     return conn, cur
-
 
 
 def create_table_bus():
@@ -38,6 +32,22 @@ def create_table_bus():
 
     conn.commit()
 
+
+def create_table_annoncement():
+    conn, cur = connect()
+
+    try:
+
+        cur.execute(
+            'CREATE TABLE announcement (date VARCHAR(10),message VARCHAR(100))')
+
+    except:
+
+        print('error')
+
+    conn.commit()
+
+
 def create_table_emp():
     conn, cur = connect()
 
@@ -53,16 +63,28 @@ def create_table_emp():
     conn.commit()
 
 
-
 def checkemp(id):
-    #dfgdfdata= fetch_data_emp()
+    data = fetch_data_emp()
     flag = True
-    # for row in data:
-    # if row[0]==id:
-    # flag=False
-    # break
-    # else:
-    # continue
+    for row in data:
+        if row[0] == id:
+            flag = False
+            break
+        else:
+            continue
+
+    return flag
+
+
+def checkbus(busno):
+    data = fetch_data_emp()
+    flag = True
+    for row in data:
+        if row[0] == busno:
+            flag = False
+            break
+        else:
+            continue
 
     return flag
 
@@ -91,7 +113,6 @@ def insert_data_emp():
         print("employee already exist ")
 
     empdetails()
-
 
 
 def del_data_emp():
@@ -124,13 +145,9 @@ def fetch_data_emp():
     except:
         print('error !')
 
-   
     data = cur.fetchall()
 
-
     return data
-
-
 
 
 def print_data_emp(data):
@@ -138,10 +155,8 @@ def print_data_emp(data):
     print('Query result: ')
     print()
 
-    
     for row in data:
 
-   
         print('id: ', row[0])
         print('name: ', row[1])
         print('salary: ', row[2])
@@ -151,12 +166,14 @@ def print_data_emp(data):
     admin()
 
 # function to delete the table
+
+
 def insert_data_bus():
     create_table_bus()
     print("------------------------------")
     print("you are in insert  function")
     busno = input("enter bus no : ")
-    result = checkemp(id)
+    result = checkbus(busno)
     if result:
         dest = input("enter a destination:")
         time = input("enter a time for bus ")
@@ -176,10 +193,11 @@ def insert_data_bus():
 
     busdetails()
 
+
 def del_data_bus():
     print("you are in delete function")
     Busno = input("enter a bus no:")
-    result = checkemp(Busno)
+    result = checkbus(Busno)
     if result:
         print("this bus no doesnot exist in the list")
 
@@ -195,6 +213,7 @@ def del_data_bus():
 
     busdetails()
 
+
 def fetch_data_bus():
 
     conn, cur = connect()
@@ -205,21 +224,18 @@ def fetch_data_bus():
     except:
         print('error !')
 
-   
     data = cur.fetchall()
 
-
     return data
+
 
 def print_data_bus(data):
 
     print('Query result: ')
     print()
 
-    
     for row in data:
 
-   
         print('Bus No: ', row[0])
         print('Destination: ', row[1])
         print('time: ', row[2])
@@ -227,8 +243,6 @@ def print_data_bus(data):
         print('----------------------------------')
 
     admin()
-
-
 
 
 def busdetails():
@@ -245,24 +259,19 @@ def busdetails():
         del_data_bus()
 
     elif op == '3':
-        data= fetch_data_bus()
+        data = fetch_data_bus()
         print_data_bus(data)
-
 
     else:
         print(" you entered wrong numbeer ")
         admin()
 
 
-def announcement():
-    pass
-
-
 def empdetails():
     print("choose the operation  on emp")
     print(" for inserting : 1 ")
     print(" for  deleting : 2 ")
-    print( " for printing details:3")
+    print(" for printing details:3")
     print("               ")
     op = input("enter desired option: ")
     if op == '1':
@@ -270,30 +279,69 @@ def empdetails():
 
     elif op == '2':
         del_data_emp()
-    
-    elif op== '3':
-        data= fetch_data_emp()
-        print_data_emp(data)
 
+    elif op == '3':
+        data = fetch_data_emp()
+        print_data_emp(data)
 
     else:
         print(" you entered wrong numbeer ")
         admin()
 
 
-def announcement():
-    pass
+def fetch_announcement():
+
+    conn, cur = connect()
+
+    try:
+        cur.execute('SELECT * FROM announcement')
+
+    except:
+        print('error !')
+
+    data = cur.fetchall()
+
+    return data
+
+
+def addannouncement():
+    create_table_annoncement()
+    print("type a announcement message here")
+    print("----------------------------------")
+    date = input("enter todays date")
+    message = input("message---------->")
+    conn, cur = connect()
+    try:
+        cur.execute('INSERT INTO announcement VALUES(%s,%s)',
+                    (date, message))
+
+    except Exception as e:
+        print('error', e)
+
+    admin()
+
+
+def print_announcement():
+    print('Query result: ')
+    print()
+    data = fetch_announcement()
+
+    for row in data:
+
+        print(row[0])
+        print(row[1])
+
+        print('----------------------------------')
 
 
 def admin():
-
     print("as you are logged in as admin ")
     print("...................")
     print(" please select the option of the task you wanna do ")
     print("...................")
     print(" for bus details insert/remove/print:1")
     print(" for employee  details insert/remove/print:2")
-    print(" for adding any announcement:3")
+    print(" for adding any announcement(lost/found/delaya):3")
     selc = input(" your desired task : ")
     print("...................")
     print("           ")
@@ -303,9 +351,8 @@ def admin():
         empdetails()
 
     elif selc == '3':
-        announcement()
+        addannouncement()
 
-    
     else:
         print("do you continue as admin ")
         op = input(" enter 'yes' or any other key for main menu")
@@ -348,5 +395,5 @@ if __name__ == '__main__':
         else:
             print("choose at least one option for our service ")
             home()
-
+    print_announcement()
     home()
