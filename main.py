@@ -24,6 +24,20 @@ def connect():
 
 
 
+def create_table_bus():
+    conn, cur = connect()
+
+    try:
+
+        cur.execute(
+            'CREATE TABLE bus (busno VARCHAR(10), dest VARCHAR(10),  time VARCHAR(10), seats INT)')
+
+    except:
+
+        print('error')
+
+    conn.commit()
+
 def create_table_emp():
     conn, cur = connect()
 
@@ -39,8 +53,9 @@ def create_table_emp():
     conn.commit()
 
 
+
 def checkemp(id):
-    data= fetch_data_emp()
+    #dfgdfdata= fetch_data_emp()
     flag = True
     # for row in data:
     # if row[0]==id:
@@ -56,12 +71,12 @@ def insert_data_emp():
     create_table_emp()
     print("------------------------------")
     print("you are in insert  function")
-    id = input("inter a id : ")
+    id = input("enter customer  id : ")
     result = checkemp(id)
     if result:
         name = input("enter a name:")
         salary = int(input("enter a salary amount "))
-        busno = int(input("enter a bus number"))
+        busno = input("enter a bus number")
         conn, cur = connect()
 
         try:
@@ -76,6 +91,7 @@ def insert_data_emp():
         print("employee already exist ")
 
     empdetails()
+
 
 
 def del_data_emp():
@@ -132,25 +148,113 @@ def print_data_emp(data):
         print('busno: ', row[3])
         print('----------------------------------')
 
+    admin()
+
 # function to delete the table
+def insert_data_bus():
+    create_table_bus()
+    print("------------------------------")
+    print("you are in insert  function")
+    busno = input("enter bus no : ")
+    result = checkemp(id)
+    if result:
+        dest = input("enter a destination:")
+        time = input("enter a time for bus ")
+        seats = int(input("enter seats number"))
+        conn, cur = connect()
 
+        try:
+            cur.execute('INSERT INTO bus VALUES(%s, %s, %s, %s)',
+                        (busno, dest, time, seats))
 
-def delete_table():
+        except Exception as e:
+            print('error', e)
+    # commiting the transaction.
+        conn.commit()
+    else:
+        print("employee already exist ")
+
+    busdetails()
+
+def del_data_bus():
+    print("you are in delete function")
+    Busno = input("enter a bus no:")
+    result = checkemp(Busno)
+    if result:
+        print("this bus no doesnot exist in the list")
+
+    else:
+        conn, cur = connect()
+        try:
+            cur.execute("DELETE from bus where busno=Busno;")
+
+        except:
+            print("error while deleting")
+
+        conn.commit()
+
+    busdetails()
+
+def fetch_data_bus():
 
     conn, cur = connect()
 
-    # delete the table
     try:
+        cur.execute('SELECT * FROM bus')
 
-        cur.execute('DROP TABLE emp')
+    except:
+        print('error !')
 
-    except Exception as e:
-        print('error', e)
+   
+    data = cur.fetchall()
 
-    conn.commit()
+
+    return data
+
+def print_data_bus(data):
+
+    print('Query result: ')
+    print()
+
+    
+    for row in data:
+
+   
+        print('Bus No: ', row[0])
+        print('Destination: ', row[1])
+        print('time: ', row[2])
+        print('Seats ', row[3])
+        print('----------------------------------')
+
+    admin()
+
+
 
 
 def busdetails():
+    print("choose the operation  on emp")
+    print(" for inserting : 1 ")
+    print(" for  deleting : 2 ")
+    print("for printing bus details : 3")
+    print("               ")
+    op = input("enter desired option: ")
+    if op == '1':
+        insert_data_bus()
+
+    elif op == '2':
+        del_data_bus()
+
+    elif op == '3':
+        data= fetch_data_bus()
+        print_data_bus(data)
+
+
+    else:
+        print(" you entered wrong numbeer ")
+        admin()
+
+
+def announcement():
     pass
 
 
@@ -158,6 +262,7 @@ def empdetails():
     print("choose the operation  on emp")
     print(" for inserting : 1 ")
     print(" for  deleting : 2 ")
+    print( " for printing details:3")
     print("               ")
     op = input("enter desired option: ")
     if op == '1':
@@ -165,6 +270,11 @@ def empdetails():
 
     elif op == '2':
         del_data_emp()
+    
+    elif op== '3':
+        data= fetch_data_emp()
+        print_data_emp(data)
+
 
     else:
         print(" you entered wrong numbeer ")
@@ -181,10 +291,9 @@ def admin():
     print("...................")
     print(" please select the option of the task you wanna do ")
     print("...................")
-    print(" for bus details insert/remove:1")
-    print(" for employee  details insert/remove:2")
-    print(" print employee details:3")
-    print(" for adding any anniuncement:4")
+    print(" for bus details insert/remove/print:1")
+    print(" for employee  details insert/remove/print:2")
+    print(" for adding any announcement:3")
     selc = input(" your desired task : ")
     print("...................")
     print("           ")
@@ -196,9 +305,7 @@ def admin():
     elif selc == '3':
         announcement()
 
-    elif selc == '3':
-        print_data_emp()
-
+    
     else:
         print("do you continue as admin ")
         op = input(" enter 'yes' or any other key for main menu")
