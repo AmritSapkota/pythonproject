@@ -1,7 +1,6 @@
 import psycopg2
 import datetime
 import random
-from wipe import Cls
 
 
 def connect():
@@ -203,20 +202,7 @@ def admin():
 
 # User Part 
 def user():
-    print("************How might we help you?************")
-    print("1. Search Route")
-    print("2. Reserve ticket")
-    print("3. Cancel ticket")
-    print("4. Reserve vehicle")
-    print("5. Timetable of the vehicle")
-    choice = int(input("Enter option order: "))
-    
-
-
-
-
-
-
+   pass
 
 # driver function
 if __name__ == '__main__':
