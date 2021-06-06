@@ -1,8 +1,7 @@
 import psycopg2
 import datetime
 import random
-
-
+from wipe import Cls
 
 
 def connect():
@@ -10,7 +9,7 @@ def connect():
     
     try:
         conn = psycopg2.connect(database="pythonproject", user="postgres",
-                                password="gautam", host="127.0.0.1", port="5432")
+                                password="amrit", host="127.0.0.1", port="5432")
 
       
         cur = conn.cursor()
@@ -77,7 +76,6 @@ def insert_data_emp():
 
     empdetails()
 
-
 def del_data_emp():
     print("you are in delete function")
     Id = input("enter a id:")
@@ -97,7 +95,6 @@ def del_data_emp():
 
     empdetails()
 
-
 def fetch_data_emp():
 
     conn, cur = connect()
@@ -113,9 +110,6 @@ def fetch_data_emp():
 
 
     return data
-
-
-
 
 def print_data_emp(data):
 
@@ -207,9 +201,21 @@ def admin():
         else:
             home()
 
-
+# User Part 
 def user():
-    pass
+    print("************How might we help you?************")
+    print("1. Search Route")
+    print("2. Reserve ticket")
+    print("3. Cancel ticket")
+    print("4. Reserve vehicle")
+    print("5. Timetable of the vehicle")
+    choice = int(input("Enter option order: "))
+    
+
+
+
+
+
 
 
 # driver function
@@ -222,12 +228,12 @@ if __name__ == '__main__':
         print(" for admin : 1")
         print(" for User: 2 ")
         print("....................")
-        opt = input("Enter appropraite number")
+        opt = input("Enter appropraite number: ")
         print("        ")
         if opt == '1':
-            print(" you have to enter your admin id and password ")
-            id = input("id:")
-            password = input("password :")
+            print("*******you have to enter your admin id and password********")
+            id = input("id: ")
+            password = input("password: ")
             if id == 'gautam591' and password == '123456':
                 print(" you ahve logged in successfully")
                 print(".....................")
