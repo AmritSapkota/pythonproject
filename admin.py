@@ -202,11 +202,11 @@ def insert_data_bus():
 
 
 def del_data_bus():
-    print("you are in delete function")
-    Busno = input("enter a bus no:")
+    print("You are in delete function")
+    Busno = input("Enter a bus no:")
     result = checkbus(Busno)
     if result:
-        print("this bus no doesnot exist in the list")
+        print("This bus no doesnot exist in the list")
 
     else:
         conn, cur = connect()
@@ -215,7 +215,7 @@ def del_data_bus():
             print(" you have successfully deleted Bus details of busno:--->", Busno)
             print("---------------------------------------------")
         except:
-            print("error while deleting")
+            print("Error while deleting")
 
         conn.commit()
 

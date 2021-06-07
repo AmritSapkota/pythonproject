@@ -15,7 +15,7 @@ def menu():
 
     selectedService = int(input("Select service: "))
     if (selectedService == 1):
-       searchRoute()
+        searchRoute()
     elif (selectedService == 2):
         reserve_ticket()
     elif (selectedService == 3):
@@ -31,14 +31,14 @@ def menu():
 
 def searchRoute():
     route = input("Enter your destination: ")
-    data=admin.fetch_data_bus()
+    data = admin.fetch_data_bus()
     for row in data:
-        if row[1]==route:
-             print('Bus No: ', row[0])
-             print('Destination: ', row[1])
-             print('time: ', row[2])
-             print('Seats ', row[3])
-             print('----------------------------------')
+        if row[1] == route:
+            print('Bus No: ', row[0])
+            print('Destination: ', row[1])
+            print('time: ', row[2])
+            print('Seats ', row[3])
+            print('----------------------------------')
 
     # fetching all bus info with this destination
 
@@ -132,10 +132,12 @@ def print_ticket_info(data):
 
 
 def term_and_condition():
+    print("------------------------------------------------------------------")
     print("you can only cancel the ticket before the 1 hour of departure time ")
     print('while cancelling the ticket your  30% payment will be deducted     ')
     print("yoor money will be return to the same card from which you booked the ticket")
     print("if you still want to cancel the ticket please enter 'yes' if you dont please enter  'no'")
+    print("---------------------------------------------------------------------------------------")
     op = input("do you want to cancel your ticket yes/no:-->")
     if op == 'yes':
         cancel_ticket()
@@ -145,19 +147,20 @@ def term_and_condition():
 
 def cancel_ticket():
 
-    ticket_no = input("enter your ticket numbeer:-->")
-    result = check_ticket(ticket_no)
+    ticketno = int(input("Enter your ticket numbeer:-->"))
+    result = check_ticket(ticketno)
     if result:
         print("The ticket nuber you entered is not issued yet")
 
     else:
         conn, cur = connect()
         try:
-            cur.execute("DELETE from ticket where ticketno=ticket_no;")
-            print(" Your ticket is succefully cancelled  :--->", ticket_no)
+            print(" Your ticket is successfully cancelled  :--->", ticketno)
+            cur.execute("DELETE from ticket where ticketno =ticketno;")
             print("---------------------------------------------")
         except:
-            print("error while deleting")
+            print("    ")
+            menu()
 
         conn.commit()
 
@@ -169,5 +172,5 @@ def reserve_vehicle():
 
 
 def vehicle_timetable():
-    data=admin.fetch_data_bus()
+    data = admin.fetch_data_bus()
     admin.print_data_bus(data)
