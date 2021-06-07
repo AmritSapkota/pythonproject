@@ -21,17 +21,17 @@ def create_table_bus():
     conn.commit()
 
 
-def create_table_annoncement():
+def create_table_announcement():
     conn, cur = connect()
 
     try:
 
         cur.execute(
-            'CREATE TABLE announcement (date VARCHAR(10),message VARCHAR(100))')
+            'CREATE TABLE announcement (date VARCHAR(10),message VARCHAR(10))')
 
     except:
 
-        print('error')
+        print('table Already exist  Please enter the data')
 
     conn.commit()
 
@@ -298,7 +298,7 @@ def fetch_announcement():
 
 
 def addannouncement():
-    create_table_annoncement()
+    create_table_announcement()
     print("Type a announcement message here")
     print("----------------------------------")
     date = input("enter todays date-->")
@@ -319,10 +319,8 @@ def print_announcement():
     data = fetch_announcement()
 
     for row in data:
-
         print(row[0])
         print(row[1])
-
         print('----------------------------------')
 
 
