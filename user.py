@@ -21,7 +21,7 @@ def menu():
     elif (selectedService == 2):
         reserve_ticket()
     elif (selectedService == 3):
-        pass
+        term_and_condition()
     elif (selectedService == 4):
         pass
     elif (selectedService == 5):
@@ -64,7 +64,7 @@ def print_ticket_info(ticket_no):
             print('Phone no: ', row[3])
             print('Ticket no : ',row[4])
             print('----------------------------------')
-            reserve_ticket()
+            menu()
         else:
             continue
 
@@ -81,6 +81,7 @@ def check_ticket(ticketno):
     return flag
 def generate_rand():
     return random.randint(1000101, 9999999)
+
 
 def reserve_ticket():
      create_table()
@@ -110,9 +111,37 @@ def reserve_ticket():
 
 
 
+def term_and_condition():
+    print (" you can only cancel the ticket before the 1 hour of departure time ")
+    print ('while cancelling the ticket your  30% payment will be deducted     ')
+    print ( "yoor money will be return to the same card from which you booked the ticket")
+    print(" if you still want to cancel the ticket please enter 'yes' if you dont please enter  'no'" )
+    op= input("do you want to cancel your ticket yes/no:-->")
+    if op=='yes':
+        cancel_ticket()
+    elif op=='no':
+        menu()
 
 def cancel_ticket():
-    pass
+    
+    ticket_no= input("enter your ticket numbeer:-->")
+    result=check_ticket(ticket_no)
+    if result:
+        print("The ticket nuber you entered is not issued yet")
+
+    else:
+        conn, cur = connect()
+        try:
+            cur.execute("DELETE from ticket where ticketno=ticket_no;")
+            print( " Your ticket is succefully cancelled  :--->",ticket_no)
+            print("---------------------------------------------")
+        except:
+            print("error while deleting")
+
+        conn.commit()
+
+    menu()
+
 
 
 def reserve_vehicle():
