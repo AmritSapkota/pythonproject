@@ -92,6 +92,10 @@ def insert_data_emp():
             cur.execute('INSERT INTO emp VALUES(%s, %s, %s, %s)',
                         (id, name, salary, busno))
 
+            print("Data insertion succesfull")
+            print("---------------------------------")
+            empdetails()
+
         except Exception as e:
             print('error', e)
     # commiting the transaction.
@@ -167,7 +171,7 @@ def addannouncement():
     try:
         cur.execute('INSERT INTO news VALUES(%s, %s, %s)',
                     (date, subject, message))
-        print("announcement made successfully!!!!")
+        print("Announcement made successfully!!!!")
 
     except Exception as e:
         print('error', e)
@@ -178,18 +182,22 @@ def addannouncement():
 def insert_data_bus():
     create_table_bus()
     print("------------------------------")
-    print("you are in insert  function")
-    busno = input("enter bus no : ")
+    print("You are in insert  function")
+    busno = input("Enter bus no : ")
     result = checkbus(busno)
     if result:
-        dest = input("enter a destination:")
-        time = input("enter a time for bus ")
-        seats = int(input("enter seats number"))
+        dest = input("Enter a destination:--->")
+        time = input("Enter a time for bus:--> ")
+        seats = int(input("Enter seats number:->"))
         conn, cur = connect()
 
         try:
             cur.execute('INSERT INTO bus VALUES(%s, %s, %s, %s)',
                         (busno, dest, time, seats))
+            
+            print("Data insertion Successfull")
+            print("------------------------------>")
+            busdetails()
 
         except Exception as e:
             print('error', e)
@@ -203,7 +211,7 @@ def insert_data_bus():
 
 def del_data_bus():
     print("You are in delete function")
-    Busno = input("Enter a bus no:")
+    Busno = input("Enter a bus no:-->")
     result = checkbus(Busno)
     if result:
         print("This bus no doesnot exist in the list")
@@ -279,12 +287,12 @@ def print_data_announcement(data):
 
 
 def busdetails():
-    print("choose the operation  on bus")
-    print(" for inserting : 1 ")
-    print(" for  deleting : 2 ")
-    print("for printing bus details : 3")
+    print("Choose the operation  on bus")
+    print(" For inserting : 1 ")
+    print(" For  deleting : 2 ")
+    print("For printing bus details : 3")
     print("               ")
-    op = input("enter desired option:--> ")
+    op = input("Enter desired option:--> ")
     print("-------------------------------")
     if op == '1':
         insert_data_bus()
@@ -302,10 +310,10 @@ def busdetails():
 
 
 def empdetails():
-    print(" choose the operation  on employee")
-    print(" for inserting : 1 ")
-    print(" for  deleting : 2 ")
-    print(" for printing details: 3")
+    print(" Choose the operation  on employee")
+    print(" For inserting : 1 ")
+    print(" For  deleting : 2 ")
+    print(" For printing details: 3")
     print("               ")
     op = input("Enter desired option:-----> ")
     print("---------------------------")
@@ -327,12 +335,12 @@ def empdetails():
 def admin():
     print("As you are logged in as admin ")
     print("...................")
-    print(" please select the option of the task you wanna do ")
+    print(" Please select the option of the task you wanna do ")
     print("...................")
-    print(" for bus details insert/remove/print:1")
-    print(" for employee  details insert/remove/print:2")
-    print(" for adding any announcement(lost/found/delaya):3")
-    selc = input(" your desired task :---> ")
+    print(" For bus details insert/remove/print:1")
+    print(" For employee  details insert/remove/print:2")
+    print(" For adding any announcement(lost/found/delaya):3")
+    selc = input(" Your desired task :---> ")
     print("...................")
     print("           ")
     if selc == '1':
