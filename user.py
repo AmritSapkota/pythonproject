@@ -1,3 +1,4 @@
+
 import psycopg2
 import random
 from main import connect
@@ -41,7 +42,7 @@ def create_table():
         cur.execute(
             'CREATE TABLE ticket (name VARCHAR(10), dest VARCHAR(10),  busno VARCHAR(10), phoneno INT, ticketno INT)')
     except:
-        print('Error while creating table.')
+        print('table already exist please enter the data.')
     conn.commit()
 
 def fetch_data_ticket():
@@ -52,6 +53,20 @@ def fetch_data_ticket():
         print('Ticket Error')
     data = cur.fetchall()
     return data
+
+def print_ticket_info(ticket_no):
+    data= fetch_data_ticket()
+    for row in data:
+        if row[4]==ticket_no:
+            print('Name: ', row[0])
+            print('Destination: ', row[1])
+            print('Bus no: ', row[2])
+            print('Phone no: ', row[3])
+            print('Ticket no : ',row[4])
+            print('----------------------------------')
+            reserve_ticket()
+        else:
+            continue
 
 def check_ticket(ticketno):
     data = fetch_data_ticket()
@@ -68,7 +83,7 @@ def generate_rand():
     return random.randint(1000101, 9999999)
 
 def reserve_ticket():
-     #create_table()
+     create_table()
      name = input("Name: ")
      dest = input("Destinatino: ")
      busno = input("Bus no: ")
@@ -77,13 +92,15 @@ def reserve_ticket():
 
      #checking ticket
      while not check_ticket(ticket_no):
-         ticket_no = generate_rand()
+          ticket_no = generate_rand()
 
      conn, cur = connect()
      try:
         cur.execute('INSERT INTO ticket VALUES(%s, %s, %s, %s, %s)',
                         (name, dest, busno, phoneno, ticket_no))
         print("!! Ticket Reserved !!")
+        print("your ticket info is----->")
+        print_ticket_info(ticket_no)
 
      except Exception as e:
             print('error', e)

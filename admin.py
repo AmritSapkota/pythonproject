@@ -299,9 +299,9 @@ def fetch_announcement():
 
 def addannouncement():
     create_table_annoncement()
-    print("type a announcement message here")
+    print("Type a announcement message here")
     print("----------------------------------")
-    date = input("enter todays date")
+    date = input("enter todays date-->")
     message = input("message---------->")
     conn, cur = connect()
     try:
@@ -316,7 +316,6 @@ def addannouncement():
 
 def print_announcement():
     print('Query result: ')
-    print()
     data = fetch_announcement()
 
     for row in data:
