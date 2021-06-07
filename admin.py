@@ -2,7 +2,7 @@ import psycopg2
 import datetime
 import random
 from main import connect
-from user import menu
+import user
 
 
 def create_table_bus():
@@ -276,9 +276,6 @@ def print_data_announcement(data):
     for row in data:
         for x in row:
             print(x)
-    
-
-        
 
 
 def busdetails():
@@ -379,9 +376,7 @@ if __name__ == '__main__':
                 print("you entered wrong details please try again ")
                 home()
         elif opt == '2':
-            data = fetch_data_bus()
-            print_data_bus(data)
-            menu()
+            user.menu()
 
         else:
             print("choose at least one option for our service ")

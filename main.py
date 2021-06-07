@@ -1,4 +1,4 @@
-from admin import fetch_data_bus
+
 import psycopg2
 import datetime
 import random

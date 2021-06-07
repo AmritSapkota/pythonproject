@@ -2,7 +2,7 @@
 import psycopg2
 import random
 from main import connect
-
+import admin
 
 
 def menu():
@@ -15,7 +15,7 @@ def menu():
 
     selectedService = int(input("Select service: "))
     if (selectedService == 1):
-        pass
+       searchRoute()
     elif (selectedService == 2):
         reserve_ticket()
     elif (selectedService == 3):
@@ -23,7 +23,7 @@ def menu():
     elif (selectedService == 4):
         pass
     elif (selectedService == 5):
-        pass
+        vehicle_timetable()
     else:
         print("-------Please Enter Vaild Service.-----------")
         menu()
@@ -31,6 +31,14 @@ def menu():
 
 def searchRoute():
     route = input("Enter your destination: ")
+    data=admin.fetch_data_bus()
+    for row in data:
+        if row[1]==route:
+             print('Bus No: ', row[0])
+             print('Destination: ', row[1])
+             print('time: ', row[2])
+             print('Seats ', row[3])
+             print('----------------------------------')
 
     # fetching all bus info with this destination
 
@@ -161,4 +169,5 @@ def reserve_vehicle():
 
 
 def vehicle_timetable():
-    pass
+    data=admin.fetch_data_bus()
+    admin.print_data_bus(data)
