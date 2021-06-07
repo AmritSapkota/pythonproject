@@ -348,7 +348,7 @@ def admin():
 
     else:
         print("Do you continue as admin ")
-        op = input(" Enter 'yes' or any other key for main menu")
+        op = input(" Enter 'yes' or any other key for main menu:------>")
         if op == 'yes':
             admin()
         else:
@@ -379,6 +379,8 @@ if __name__ == '__main__':
                 print("you entered wrong details please try again ")
                 home()
         elif opt == '2':
+            data = fetch_data_bus()
+            print_data_bus(data)
             menu()
 
         else:
