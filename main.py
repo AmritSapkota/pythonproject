@@ -16,3 +16,30 @@ def connect():
         print("Error while creating PostgreSQL table", error)
 
     return conn, cur
+
+
+def create_table_bus():
+    conn, cur = connect()
+
+    try:
+
+        cur.execute(
+            'CREATE TABLE bus (busno VARCHAR(10), dest VARCHAR(10),  time VARCHAR(10), seats INT)')
+
+    except:
+
+        print('Table already exist please insert data')
+
+    conn.commit()
+
+def checkbus(busno):
+    data = fetch_data_bus()
+    flag = True
+    for row in data:
+        if row[0] == busno:
+            flag = False
+            break
+        else:
+            continue
+
+    return flag

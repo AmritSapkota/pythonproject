@@ -5,7 +5,6 @@ from main import connect
 from user import menu
 
 
-
 def create_table_bus():
     conn, cur = connect()
 
@@ -21,21 +20,6 @@ def create_table_bus():
     conn.commit()
 
 
-def create_table_announcement():
-    conn, cur = connect()
-
-    try:
-
-        cur.execute(
-            'CREATE TABLE announcement (date VARCHAR(10),message VARCHAR(10))')
-
-    except:
-
-        print('table Already exist  Please enter the data')
-
-    conn.commit()
-
-
 def create_table_emp():
     conn, cur = connect()
 
@@ -43,6 +27,21 @@ def create_table_emp():
 
         cur.execute(
             'CREATE TABLE emp (id VARCHAR(10), name VARCHAR(10),  salary INT, busno INT)')
+
+    except:
+
+        print('Table already exist please insert the data')
+
+    conn.commit()
+
+
+def create_table_news():
+    conn, cur = connect()
+
+    try:
+
+        cur.execute(
+            'CREATE TABLE news (date VARCHAR(10), subject VARCHAR(10), message VARCHAR(10))')
 
     except:
 
@@ -65,7 +64,7 @@ def checkemp(id):
 
 
 def checkbus(busno):
-    data = fetch_data_emp()
+    data = fetch_data_bus()
     flag = True
     for row in data:
         if row[0] == busno:
@@ -114,9 +113,9 @@ def del_data_emp():
     else:
         try:
             cur.execute("DELETE from emp where id=Id;")
-            print( " you have successfully deleted  details of employe id:--->",Id)
+            print(" you have successfully deleted  details of employe id:--->", Id)
             print("---------------------------------------------")
-
+            empdetails()
         except:
             print("error while deleting")
 
@@ -146,16 +145,34 @@ def print_data_emp(data):
     print()
 
     for row in data:
-
         print('id: ', row[0])
         print('name: ', row[1])
         print('salary: ', row[2])
-        print('busno: ', row[3])
+        print('busno assigned: ', row[3])
         print('----------------------------------')
 
     admin()
 
 # function to delete the table
+
+
+def addannouncement():
+    create_table_news()
+    print("Type a announcement message here")
+    print("----------------------------------")
+    date = input("enter todays date-->")
+    subject = input("subject---->(Lost/Found/Delay):")
+    message = input("message---------->")
+    conn, cur = connect()
+    try:
+        cur.execute('INSERT INTO news VALUES(%s, %s, %s)',
+                    (date, subject, message))
+        print("announcement made successfully!!!!")
+
+    except Exception as e:
+        print('error', e)
+
+    admin()
 
 
 def insert_data_bus():
@@ -179,7 +196,7 @@ def insert_data_bus():
     # commiting the transaction.
         conn.commit()
     else:
-        print("employee already exist ")
+        print("error while inserting the data   ")
 
     busdetails()
 
@@ -195,7 +212,7 @@ def del_data_bus():
         conn, cur = connect()
         try:
             cur.execute("DELETE from bus where busno=Busno;")
-            print( " you have successfully deleted Bus details of busno:--->",Busno)
+            print(" you have successfully deleted Bus details of busno:--->", Busno)
             print("---------------------------------------------")
         except:
             print("error while deleting")
@@ -236,8 +253,36 @@ def print_data_bus(data):
     admin()
 
 
+def fetch_data_announcement():
+
+    conn, cur = connect()
+
+    try:
+        cur.execute('SELECT * FROM  news ')
+
+    except:
+        print('error !')
+
+    data = cur.fetchall()
+
+    return data
+
+
+def print_data_announcement(data):
+
+    print('Query result: ')
+    print()
+
+    for row in data:
+        for x in row:
+            print(x)
+    
+
+        
+
+
 def busdetails():
-    print("choose the operation  on emp")
+    print("choose the operation  on bus")
     print(" for inserting : 1 ")
     print(" for  deleting : 2 ")
     print("for printing bus details : 3")
@@ -282,48 +327,6 @@ def empdetails():
         admin()
 
 
-def fetch_announcement():
-
-    conn, cur = connect()
-
-    try:
-        cur.execute('SELECT * FROM announcement')
-
-    except:
-        print('error !')
-
-    data = cur.fetchall()
-
-    return data
-
-
-def addannouncement():
-    create_table_announcement()
-    print("Type a announcement message here")
-    print("----------------------------------")
-    date = input("enter todays date-->")
-    message = input("message---------->")
-    conn, cur = connect()
-    try:
-        cur.execute('INSERT INTO announcement VALUES(%s,%s)',
-                    (date, message))
-
-    except Exception as e:
-        print('error', e)
-
-    admin()
-
-
-def print_announcement():
-    print('Query result: ')
-    data = fetch_announcement()
-
-    for row in data:
-        print(row[0])
-        print(row[1])
-        print('----------------------------------')
-
-
 def admin():
     print("As you are logged in as admin ")
     print("...................")
@@ -350,9 +353,6 @@ def admin():
             admin()
         else:
             home()
-
-
-
 
 
 # driver function
@@ -384,5 +384,6 @@ if __name__ == '__main__':
         else:
             print("choose at least one option for our service ")
             home()
-    print_announcement()
+    data = fetch_data_announcement()
+    print_data_announcement(data)
     home()
