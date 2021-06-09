@@ -1,12 +1,12 @@
 import psycopg2
 import datetime
 import random
-from main import connect
+import main 
 import user
 
 
 def create_table_bus():
-    conn, cur = connect()
+    conn, cur = main.connect()
 
     try:
 
@@ -21,7 +21,7 @@ def create_table_bus():
 
 
 def create_table_emp():
-    conn, cur = connect()
+    conn, cur = main.connect()
 
     try:
 
@@ -36,7 +36,7 @@ def create_table_emp():
 
 
 def create_table_news():
-    conn, cur = connect()
+    conn, cur = main.connect()
 
     try:
 
@@ -84,9 +84,9 @@ def insert_data_emp():
     result = checkemp(id)
     if result:
         name = input("enter a name:")
-        salary = int(input("enter a salary amount "))
-        busno = input("enter a bus number")
-        conn, cur = connect()
+        salary = int(input("enter a salary amount---> "))
+        busno = input("enter a bus number--->")
+        conn, cur = main.connect()
 
         try:
             cur.execute('INSERT INTO emp VALUES(%s, %s, %s, %s)',
@@ -110,7 +110,7 @@ def del_data_emp():
     print("you are in delete function")
     Id = input("enter a id:")
     result = checkemp(Id)
-    conn, cur = connect()
+    conn, cur = main.connect()
     if result:
         print("this id doesnot exist in the list")
 
@@ -130,7 +130,7 @@ def del_data_emp():
 
 def fetch_data_emp():
 
-    conn, cur = connect()
+    conn, cur = main.connect()
 
     try:
         cur.execute('SELECT * FROM emp')
@@ -164,17 +164,17 @@ def addannouncement():
     create_table_news()
     print("Type a announcement message here")
     print("----------------------------------")
-    date = input("enter todays date-->")
-    subject = input("subject---->(Lost/Found/Delay):")
-    message = input("message---------->")
-    conn, cur = connect()
+    date = input("Enter todays date-->")
+    subject = input("Subject---->(Lost/Found/Delay):")
+    message = input("Message---------->")
+    conn, cur = main.connect()
     try:
         cur.execute('INSERT INTO news VALUES(%s, %s, %s)',
                     (date, subject, message))
         print("Announcement made successfully!!!!")
 
     except Exception as e:
-        print('error', e)
+        print('Error', e)
 
     admin()
 
@@ -189,12 +189,12 @@ def insert_data_bus():
         dest = input("Enter a destination:--->")
         time = input("Enter a time for bus:--> ")
         seats = int(input("Enter seats number:->"))
-        conn, cur = connect()
+        conn, cur = main.connect()
 
         try:
             cur.execute('INSERT INTO bus VALUES(%s, %s, %s, %s)',
                         (busno, dest, time, seats))
-            
+
             print("Data insertion Successfull")
             print("------------------------------>")
             busdetails()
@@ -204,7 +204,7 @@ def insert_data_bus():
     # commiting the transaction.
         conn.commit()
     else:
-        print("error while inserting the data   ")
+        print("Error while inserting the data   ")
 
     busdetails()
 
@@ -217,10 +217,10 @@ def del_data_bus():
         print("This bus no doesnot exist in the list")
 
     else:
-        conn, cur = connect()
+        conn, cur = main.connect()
         try:
             cur.execute("DELETE from bus where busno=Busno;")
-            print(" you have successfully deleted Bus details of busno:--->", Busno)
+            print(" You have successfully deleted Bus details of busno:--->", Busno)
             print("---------------------------------------------")
         except:
             print("Error while deleting")
@@ -232,13 +232,13 @@ def del_data_bus():
 
 def fetch_data_bus():
 
-    conn, cur = connect()
+    conn, cur = main.connect()
 
     try:
         cur.execute('SELECT * FROM bus')
 
     except:
-        print('error !')
+        print('Error !')
 
     data = cur.fetchall()
 
@@ -254,22 +254,20 @@ def print_data_bus(data):
 
         print('Bus No: ', row[0])
         print('Destination: ', row[1])
-        print('time: ', row[2])
+        print('Time: ', row[2])
         print('Seats ', row[3])
         print('----------------------------------')
-
-    admin()
 
 
 def fetch_data_announcement():
 
-    conn, cur = connect()
+    conn, cur = main.connect()
 
     try:
         cur.execute('SELECT * FROM  news ')
 
     except:
-        print('error !')
+        print('Error !')
 
     data = cur.fetchall()
 
@@ -282,8 +280,11 @@ def print_data_announcement(data):
     print()
 
     for row in data:
-        for x in row:
-            print(x)
+        print(row[0])
+        print(row[1])
+        print([row[2]])
+
+
 
 
 def busdetails():
@@ -331,7 +332,13 @@ def empdetails():
         print(" You have entered Wrong option now we are rendering to the admin section ")
         admin()
 
-
+def print_data_announcements():
+    print("--------------->")
+    print("2021/6/8")
+    print("lost ")
+    print("gautam")
+    print("------------>")
+    
 def admin():
     print("As you are logged in as admin ")
     print("...................")
@@ -357,38 +364,10 @@ def admin():
         if op == 'yes':
             admin()
         else:
-            home()
+            ()
 
+
+def render():
+    user.menu()
 
 # driver function
-if __name__ == '__main__':
-
-    opt = ''
-
-    def home():
-        print(" choose your role")
-        print(" for admin : 1")
-        print(" for User: 2 ")
-        print("....................")
-        opt = input("Enter appropraite number:--->")
-        print("---------------------------------")
-        if opt == '1':
-            print(" you have to enter your admin id and password ")
-            id = input("id:")
-            password = input("password :")
-            if id == 'gautam591' and password == '123456':
-                print(" you ahve logged in successfully")
-                print(".....................")
-                admin()
-            else:
-                print("you entered wrong details please try again ")
-                home()
-        elif opt == '2':
-            user.menu()
-
-        else:
-            print("choose at least one option for our service ")
-            home()
-    data = fetch_data_announcement()
-    print_data_announcement(data)
-    home()

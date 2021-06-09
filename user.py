@@ -1,7 +1,7 @@
 
 import psycopg2
 import random
-from main import connect
+import main
 import admin
 
 
@@ -44,7 +44,7 @@ def searchRoute():
 
 
 def create_table():
-    conn, cur = connect()
+    conn, cur = main.connect()
     try:
         cur.execute(
             'CREATE TABLE ticket (name VARCHAR(10), dest VARCHAR(10),  busno VARCHAR(10), phoneno INT, ticketno INT)')
@@ -82,7 +82,7 @@ def reserve_ticket():
     while not check_ticket(ticket_no):
         ticket_no = generate_rand()
 
-    conn, cur = connect()
+    conn, cur = main.connect()
     try:
         cur.execute('INSERT INTO ticket VALUES(%s, %s, %s, %s, %s)',
                     (name, dest, busno, phoneno, ticket_no))
@@ -98,7 +98,7 @@ def reserve_ticket():
 
 
 def fetch_data_ticket():
-    conn, cur = connect()
+    conn, cur = main. connect()
     try:
         cur.execute('SELECT * FROM ticket')
     except:
@@ -119,7 +119,7 @@ def print_ticket_info(data):
                 print('Destination:', x)
                 count += 1
             elif count == 2:
-                print('Bus no;', x)
+                print('Bus no:', x)
                 count += 1
             elif count == 3:
                 print('Phone no:', x)
@@ -129,6 +129,7 @@ def print_ticket_info(data):
                 count += 1
 
         print("------------------")
+    menu()
 
 
 def term_and_condition():
@@ -153,7 +154,7 @@ def cancel_ticket():
         print("The ticket nuber you entered is not issued yet")
 
     else:
-        conn, cur = connect()
+        conn, cur = main.connect()
         try:
             print(" Your ticket is successfully cancelled  :--->", ticketno)
             cur.execute("DELETE from ticket where ticketno =ticketno;")
